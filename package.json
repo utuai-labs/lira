@@ -1,0 +1,56 @@
+{
+  "author": "Patrick Lewis",
+  "name": "uTu-Botkit-Demo",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "api-ai-recognizer": "^1.0.2",
+    "botbuilder": "^3.7.0",
+    "bunyan": "^1.8.8",
+    "cross-env": "^3.1.3",
+    "nedb": "^1.8.0",
+    "nedb-promise": "^2.0.1",
+    "node-fetch": "^1.6.3",
+    "restify": "^4.3.0",
+    "utu": "0.2.0-rc.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "babel-runtime": "^6.22.0",
+    "babel-watch": "^2.0.3",
+    "dotenv-cli": "^1.1.1",
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "localtunnel": "^1.8.2",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^3.1.2",
+    "pm2": "^2.4.2",
+    "webpack": "^1.13.3"
+  },
+  "babel": {
+    "presets": [
+      "stage-0",
+      "es2015"
+    ]
+  },
+  "scripts": {
+    "build": "babel src -d dist",
+    "start:prod": "npm run start",
+    "start:tunnel": "lt -h https://bot-tunnel.com -s lira -p 3000",
+    "start": "npm run build && pm2 start process.yml",
+    "stop": "pm2 delete lira",
+    "logs": "pm2 logs",
+    "start:dev": "npm run start"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": "git@github.com:utu-ai/demo-bot.git"
+}
