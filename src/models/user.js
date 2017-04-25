@@ -8,12 +8,16 @@ export default class User {
   }
 
   async fetchUser() {
-    const user = await users.findOne({ _id: this.platformId }) || {};
-    this.balance = user.balance || 0.00;
-    this.firstName = user.firstName || '';
-    this.lastName = user.lastName || '';
-    this.email = user.email || '';
-    this.setup = !!user.setup;
+    try {
+      const user = await users.findOne({ _id: this.platformId }) || {};
+      this.balance = user.balance || 0.00;
+      this.firstName = user.firstName || '';
+      this.lastName = user.lastName || '';
+      this.email = user.email || '';
+      this.setup = !!user.setup;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async update($set) {
@@ -56,7 +60,7 @@ export default class User {
         balance: this.balance,
         email: this.email,
       },
-    });
+    }).catch(e => console.log(e));
   }
 
   isSetup() {

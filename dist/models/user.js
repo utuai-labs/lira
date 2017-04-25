@@ -43,20 +43,21 @@ var User = function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                _context.prev = 0;
+                _context.next = 3;
                 return _collections.users.findOne({ _id: this.platformId });
 
-              case 2:
+              case 3:
                 _context.t0 = _context.sent;
 
                 if (_context.t0) {
-                  _context.next = 5;
+                  _context.next = 6;
                   break;
                 }
 
                 _context.t0 = {};
 
-              case 5:
+              case 6:
                 user = _context.t0;
 
                 this.balance = user.balance || 0.00;
@@ -64,13 +65,21 @@ var User = function () {
                 this.lastName = user.lastName || '';
                 this.email = user.email || '';
                 this.setup = !!user.setup;
+                _context.next = 17;
+                break;
 
-              case 11:
+              case 14:
+                _context.prev = 14;
+                _context.t1 = _context['catch'](0);
+
+                console.log(_context.t1);
+
+              case 17:
               case 'end':
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee, this, [[0, 14]]);
       }));
 
       function fetchUser() {
@@ -151,6 +160,8 @@ var User = function () {
           balance: this.balance,
           email: this.email
         }
+      }).catch(function (e) {
+        return console.log(e);
       });
     }
   }, {

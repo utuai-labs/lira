@@ -1,5 +1,7 @@
 'use strict';
 
+require('./hello');
+
 require('./profile');
 
 require('./get-balance');

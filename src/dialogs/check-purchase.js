@@ -1,6 +1,7 @@
 import builder from 'botbuilder';
 import bot from '../controllers/bot';
 import verifyUserProfile from './profile';
+import handleSponsoredDialog from '../util/handle-sponsored-dialog';
 
 bot.dialog('/check-purchase', [
   verifyUserProfile,
@@ -16,9 +17,6 @@ bot.dialog('/check-purchase', [
         session.dialogData.remainingBalance = r;
         builder.Prompts.confirm(session, `Yes you can! and you'd still have $${r} left! Would you like me to update your balance?`);
         session.message.utu.event('Can Purchase');
-        session.message.utu.intent('check-purchase-can-purchase')
-          .then(e => console.log(e))
-          .catch(e => console.log(e));
       } else {
         session.message.utu.event('Cannot Purchase');
         session.send(`No, sorry you are about $${Math.abs(r)} short of being able to make that purchase.`);
@@ -29,8 +27,16 @@ bot.dialog('/check-purchase', [
   function (session, results) {
     if (results.response) {
       session.message.ctx.user.setBalance(session.dialogData.remainingBalance);
+      session.message.utu.user({ values: { balance: session.dialogData.remainingBalance } });
+      session.send(`Will do! Your new account balance is $${session.message.ctx.user.balance}`);
+    } else {
+      session.send(`Okay, let me know if you change your mind. Your account balance is still $${session.message.ctx.user.balance}`);
     }
-    session.send(`Will do! Your new account balance is $${session.message.ctx.user.balance}`);
+
+    session.message.utu.intent('check-purchase-can-purchase')
+      .then(handleSponsoredDialog(session))
+      .catch(e => console.log(e));
+
     session.endDialog();
   },
 ])

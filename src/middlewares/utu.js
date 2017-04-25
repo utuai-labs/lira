@@ -15,6 +15,7 @@ export const utu = new uTu(UTU_SECRET);
 
 export default {
   receive: (session, next) => {
+    console.log('RECIEVE: ', JSON.stringify(session, null, 2));
     const ctx = utu.withContext(
       {
         platform: mapPlatformToUTUNames(session.address.channelId),
@@ -35,30 +36,16 @@ export default {
     next();
   },
   send: (session, next) => {
+    console.log('SEND: ', JSON.stringify(session, null, 2));
     utu.message({
       platform: mapPlatformToUTUNames(session.address.channelId),
-      platformId: session.address.id,
+      platformId: session.address.user.id,
       values: {
         message: session.text || '',
-        rawMessage: session,
+        rawMessage: session.sourceEvent || session,
         botMessage: true,
       },
     }).catch(e => console.log(e));
     next();
   },
-};
-
-export const send = (bot, message) => {
-  utu.message({
-    platform: constants.MESSENGER,
-    platformId: message.channel,
-    sessionId: message.channel,
-    values: {
-      message: message.text || '',
-      rawMessage: {
-        text: message.text,
-      },
-      botMessage: true,
-    },
-  }).catch(e => console.log(e));
 };

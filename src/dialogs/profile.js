@@ -49,6 +49,11 @@ bot.dialog('/profile/name', [
     if (results.response) {
       session.message.ctx.user.setLastName(results.response);
     }
+    const { firstName, lastName } = session.message.ctx.user;
+
+    session.message.utu.user({ values: { firstName, lastName } });
+
+    session.send(`Alright, you should be good to go! I'll now call you ${firstName} ${lastName}`);
     session.endDialog();
   },
 ]).triggerAction({ matches: /(change|set|update).*name/i });
@@ -58,6 +63,7 @@ bot.dialog('/profile', [
     session.message.utu.event('Setup Profile');
     if (!session.message.ctx.user.firstName) {
       builder.Prompts.text(session, 'Hi, I just need to collect a few pieces of information from you since this is our first time talking! What is your first name?');
+      session.message.utu.intent('initial-setup').catch(e => console.log(e));
     } else {
       next();
     }

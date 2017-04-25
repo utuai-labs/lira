@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.send = exports.utu = undefined;
+exports.utu = undefined;
 
 var _utu = require('utu');
 
@@ -25,6 +25,7 @@ var utu = exports.utu = new _utu.uTu(UTU_SECRET);
 
 exports.default = {
   receive: function receive(session, next) {
+    console.log('RECIEVE: ', JSON.stringify(session, null, 2));
     var ctx = utu.withContext({
       platform: mapPlatformToUTUNames(session.address.channelId),
       platformId: session.user.id
@@ -45,12 +46,13 @@ exports.default = {
     next();
   },
   send: function send(session, next) {
+    console.log('SEND: ', JSON.stringify(session, null, 2));
     utu.message({
       platform: mapPlatformToUTUNames(session.address.channelId),
-      platformId: session.address.id,
+      platformId: session.address.user.id,
       values: {
         message: session.text || '',
-        rawMessage: session,
+        rawMessage: session.sourceEvent || session,
         botMessage: true
       }
     }).catch(function (e) {
@@ -58,20 +60,4 @@ exports.default = {
     });
     next();
   }
-};
-var send = exports.send = function send(bot, message) {
-  utu.message({
-    platform: _utu.constants.MESSENGER,
-    platformId: message.channel,
-    sessionId: message.channel,
-    values: {
-      message: message.text || '',
-      rawMessage: {
-        text: message.text
-      },
-      botMessage: true
-    }
-  }).catch(function (e) {
-    return console.log(e);
-  });
 };

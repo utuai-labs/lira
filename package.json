@@ -1,6 +1,6 @@
 {
   "author": "Patrick Lewis",
-  "name": "uTu-Botkit-Demo",
+  "name": "lira",
   "private": true,
   "version": "0.1.0",
   "dependencies": {
@@ -12,7 +12,7 @@
     "nedb-promise": "^2.0.1",
     "node-fetch": "^1.6.3",
     "restify": "^4.3.0",
-    "utu": "0.2.0-rc.5"
+    "utu": "0.2.0-rc.7"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -32,7 +32,6 @@
     "localtunnel": "^1.8.2",
     "nodemon": "^1.11.0",
     "npm-run-all": "^3.1.2",
-    "pm2": "^2.4.2",
     "webpack": "^1.13.3"
   },
   "babel": {
@@ -41,13 +40,19 @@
       "es2015"
     ]
   },
+  "now": {
+    "env": {
+      "UTU_SECRET": "@utu_secret",
+      "MICROSOFT_APP_ID": "@microsoft_app_id",
+      "MICROSOFT_APP_PASSWORD": "@microsoft_app_password",
+      "PORT": "80"
+    }
+  },
   "scripts": {
     "build": "babel src -d dist",
-    "start:prod": "npm run start",
-    "start:tunnel": "lt -h https://bot-tunnel.com -s lira -p 3000",
-    "start": "npm run build && pm2 start process.yml",
-    "stop": "pm2 delete lira",
-    "logs": "pm2 logs",
+    "start:prod": "pm2 start process.yml",
+    "start:tunnel": "lt -h https://bot-tunnel.com -s lirabot -p 3001",
+    "start": "node dist/index.js",
     "start:dev": "npm run start"
   },
   "license": "MIT",

@@ -12,6 +12,10 @@ var _profile = require('./profile');
 
 var _profile2 = _interopRequireDefault(_profile);
 
+var _handleSponsoredDialog = require('../util/handle-sponsored-dialog');
+
+var _handleSponsoredDialog2 = _interopRequireDefault(_handleSponsoredDialog);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _bot2.default.dialog('/check-purchase', [_profile2.default, function (session) {
@@ -25,11 +29,6 @@ _bot2.default.dialog('/check-purchase', [_profile2.default, function (session) {
       session.dialogData.remainingBalance = r;
       _botbuilder2.default.Prompts.confirm(session, 'Yes you can! and you\'d still have $' + r + ' left! Would you like me to update your balance?');
       session.message.utu.event('Can Purchase');
-      session.message.utu.intent('check-purchase-can-purchase').then(function (e) {
-        return console.log(e);
-      }).catch(function (e) {
-        return console.log(e);
-      });
     } else {
       session.message.utu.event('Cannot Purchase');
       session.send('No, sorry you are about $' + Math.abs(r) + ' short of being able to make that purchase.');
@@ -39,7 +38,15 @@ _bot2.default.dialog('/check-purchase', [_profile2.default, function (session) {
 }, function (session, results) {
   if (results.response) {
     session.message.ctx.user.setBalance(session.dialogData.remainingBalance);
+    session.message.utu.user({ values: { balance: session.dialogData.remainingBalance } });
+    session.send('Will do! Your new account balance is $' + session.message.ctx.user.balance);
+  } else {
+    session.send('Okay, let me know if you change your mind. Your account balance is still $' + session.message.ctx.user.balance);
   }
-  session.send('Will do! Your new account balance is $' + session.message.ctx.user.balance);
+
+  session.message.utu.intent('check-purchase-can-purchase').then((0, _handleSponsoredDialog2.default)(session)).catch(function (e) {
+    return console.log(e);
+  });
+
   session.endDialog();
 }]).triggerAction({ matches: /(can i)/i }).cancelAction('cancelItemAction', 'Okay, don\'t be afraid to ask again!', { matches: /(cancel|stop|nvm|quit)/i });
