@@ -13,7 +13,8 @@ var UTU_SECRET = process.env.UTU_SECRET;
 var platformMatrix = {
   sms: _utu.constants.SMS,
   facebook: _utu.constants.MESSENGER,
-  kik: _utu.constants.kik
+  kik: _utu.constants.KIK,
+  slack: _utu.constants.SLACK
 };
 
 var mapPlatformToUTUNames = function mapPlatformToUTUNames(platform) {

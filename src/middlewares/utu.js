@@ -5,7 +5,8 @@ const { UTU_SECRET } = process.env;
 const platformMatrix = {
   sms: constants.SMS,
   facebook: constants.MESSENGER,
-  kik: constants.kik,
+  kik: constants.KIK,
+  slack: constants.SLACK,
 };
 
 const mapPlatformToUTUNames = platform => platformMatrix[platform] || platformMatrix.kik;

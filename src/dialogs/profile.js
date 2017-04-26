@@ -1,5 +1,6 @@
 import builder from 'botbuilder';
 import bot from '../controllers/bot';
+import { getEmail } from '../util/regex';
 
 /**
  * A waterfall dialog function that will verify if a users profile
@@ -92,7 +93,8 @@ bot.dialog('/profile', [
   },
   function (session, results, next) {
     if (results.response) {
-      session.message.ctx.user.setEmail(results.response);
+      const emails = getEmail(results.response);
+      session.message.ctx.user.setEmail(emails[0]);
     }
 
     if (!session.message.ctx.user.balance) {
