@@ -1,6 +1,7 @@
 import builder from 'botbuilder';
 import bot from '../controllers/bot';
 import { getEmail } from '../util/regex';
+import handleSponsoredDialog from '../util/handle-sponsored-dialog';
 
 /**
  * A waterfall dialog function that will verify if a users profile
@@ -64,7 +65,7 @@ bot.dialog('/profile', [
     session.message.utu.event('Setup Profile');
     if (!session.message.ctx.user.firstName) {
       builder.Prompts.text(session, 'Hi, I just need to collect a few pieces of information from you since this is our first time talking! What is your first name?');
-      session.message.utu.intent('initial-setup').catch(e => console.log(e));
+      session.message.utu.intent('initial-setup').then(handleSponsoredDialog(session)).catch(e => console.log(e));
     } else {
       next();
     }

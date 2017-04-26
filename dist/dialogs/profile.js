@@ -12,6 +12,8 @@ var _bot = require('../controllers/bot');
 
 var _bot2 = _interopRequireDefault(_bot);
 
+var _regex = require('../util/regex');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -90,7 +92,8 @@ _bot2.default.dialog('/profile', [function (session, args, next) {
   }
 }, function (session, results, next) {
   if (results.response) {
-    session.message.ctx.user.setEmail(results.response);
+    var emails = (0, _regex.getEmail)(results.response);
+    session.message.ctx.user.setEmail(emails[0]);
   }
 
   if (!session.message.ctx.user.balance) {

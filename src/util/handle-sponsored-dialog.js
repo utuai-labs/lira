@@ -4,9 +4,8 @@ export default session => (result) => {
   if (!result.data) {
     return;
   }
-  console.log(JSON.stringify(result, null, 2));
   switch (session.message.address.channelId) {
-    case 'sms':
+    case 'sms': {
       const card = new builder.HeroCard(session)
         .text('Please checkout our sponsored content!')
         .images(
@@ -17,17 +16,8 @@ export default session => (result) => {
           builder.CardAction.openUrl(session, result.data.content.Body, 'Check it out!'),
         ]);
       session.send(new builder.Message(session).addAttachment(card));
-      // session.send(
-      //   new builder.Message(session).sourceEvent({
-      //     sms: {
-      //       To: session.message.address.user.id,
-      //       From: session.message.address.bot.id,
-      //       Body: `Please Check out our sponsored content ${result.data.content.link}`,
-      //       MediaURL: result.data.content.image,
-      //     },
-      //   }),
-      // );
       break;
+    }
     case 'facebook':
       session.send(
         new builder.Message(session).sourceEvent({
@@ -38,5 +28,13 @@ export default session => (result) => {
         }),
       );
       break;
+    case 'slack':
+      session.send(
+        new builder.Message(session).sourceEvent({
+          slack: result.data.content,
+        }),
+      );
+      break;
+    default:
   }
 };
