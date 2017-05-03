@@ -1,11 +1,11 @@
 import builder from 'botbuilder';
 import bot from '../controllers/bot';
 import verifyUserProfile from './profile';
+import handleSponsoredDialog from '../util/handle-sponsored-dialog';
 
 bot.dialog('/set-balance', [
   verifyUserProfile,
   function (session) {
-    session.message.utu.event('Set Balance');
     builder.Prompts.number(session, 'What is your new balance?');
   },
   function (session, results) {
@@ -13,6 +13,7 @@ bot.dialog('/set-balance', [
       session.message.ctx.user.setBalance(results.response);
     }
     session.send('Your current balance is $%s!', session.message.ctx.user.balance);
+    session.message.utu.intent('get-balance').then(handleSponsoredDialog(session)).catch(e => console.log(e));
     session.endDialog();
   },
 ])

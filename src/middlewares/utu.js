@@ -9,14 +9,14 @@ const platformMatrix = {
   slack: constants.SLACK,
 };
 
-const mapPlatformToUTUNames = platform => platformMatrix[platform] || platformMatrix.kik;
+export const mapPlatformToUTUNames = platform => platformMatrix[platform] || platformMatrix.kik;
 
 // create our utu client
 export const utu = new uTu(UTU_SECRET);
 
 export default {
   receive: (session, next) => {
-    console.log('RECIEVE: ', JSON.stringify(session, null, 2));
+    // console.log('RECIEVE: ', JSON.stringify(session, null, 2));
     const ctx = utu.withContext(
       {
         platform: mapPlatformToUTUNames(session.address.channelId),
@@ -37,7 +37,7 @@ export default {
     next();
   },
   send: (session, next) => {
-    console.log('SEND: ', JSON.stringify(session, null, 2));
+    // console.log('SEND: ', JSON.stringify(session, null, 2));
     utu.message({
       platform: mapPlatformToUTUNames(session.address.channelId),
       platformId: session.address.user.id,
@@ -46,7 +46,7 @@ export default {
         rawMessage: session.sourceEvent || session,
         botMessage: true,
       },
-    }).catch(e => console.log(e));
+    }).catch(e => console.log('UTU MSG Send ERROR:', e));
     next();
   },
 };

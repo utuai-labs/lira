@@ -1,14 +1,16 @@
 import User from '../models/user';
+import { mapPlatformToUTUNames } from './utu';
 
 export default {
-  receive: (message, next) => {
+  receive: (session, next) => {
     // create a new user object
-    const user = new User(message.user.id);
+    const user = new User(mapPlatformToUTUNames(session.address.channelId), session.user.id);
 
-    // assign a new user object to the message
-    Object.assign(message, { ctx: { user } });
-
-    // move on to the next middleware
-    next();
+    user.fetchUser().then(() => {
+      // assign a new user object to the message
+      Object.assign(session, { ctx: { user } });
+      // move on to the next middleware
+      next();
+    });
   },
 };

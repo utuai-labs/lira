@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.utu = undefined;
+exports.utu = exports.mapPlatformToUTUNames = undefined;
 
 var _utu = require('utu');
 
@@ -17,7 +17,7 @@ var platformMatrix = {
   slack: _utu.constants.SLACK
 };
 
-var mapPlatformToUTUNames = function mapPlatformToUTUNames(platform) {
+var mapPlatformToUTUNames = exports.mapPlatformToUTUNames = function mapPlatformToUTUNames(platform) {
   return platformMatrix[platform] || platformMatrix.kik;
 };
 
@@ -26,7 +26,7 @@ var utu = exports.utu = new _utu.uTu(UTU_SECRET);
 
 exports.default = {
   receive: function receive(session, next) {
-    console.log('RECIEVE: ', JSON.stringify(session, null, 2));
+    // console.log('RECIEVE: ', JSON.stringify(session, null, 2));
     var ctx = utu.withContext({
       platform: mapPlatformToUTUNames(session.address.channelId),
       platformId: session.user.id
@@ -47,7 +47,7 @@ exports.default = {
     next();
   },
   send: function send(session, next) {
-    console.log('SEND: ', JSON.stringify(session, null, 2));
+    // console.log('SEND: ', JSON.stringify(session, null, 2));
     utu.message({
       platform: mapPlatformToUTUNames(session.address.channelId),
       platformId: session.address.user.id,
@@ -57,7 +57,7 @@ exports.default = {
         botMessage: true
       }
     }).catch(function (e) {
-      return console.log(e);
+      return console.log('UTU MSG Send ERROR:', e);
     });
     next();
   }
