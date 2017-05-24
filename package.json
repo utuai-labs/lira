@@ -51,7 +51,8 @@
     }
   },
   "engines": {
-    "node": "7.1.0"
+    "node": "7.1.0",
+    "npm": "3.10.9"
   },
   "scripts": {
     "build": "babel src -d dist",
